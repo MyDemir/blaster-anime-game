@@ -10,7 +10,11 @@
   <div id="game-container">
     <!-- Üst Bölüm: Düşmanların geldiği alan -->
     <div id="enemy-zone">
-      <p>Enemy Zone</p>
+      <div id="ui-overlay">
+        <div id="wave-info">Wave: <span id="wave-number">1</span></div>
+        <div id="score-info">Score: <span id="player-score">0</span></div>
+        <div id="enemy-info">Enemies Left: <span id="enemies-left">10</span></div>
+      </div>
     </div>
 
     <!-- Alt Bölüm: Oyuncunun kontrol ettiği alan -->
@@ -23,5 +27,6 @@
       </div>
     </div>
   </div>
+  <script src="scripts/game.js"></script>
 </body>
 </html>
