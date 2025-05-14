@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Blaster Anime Game</title>
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-      canvas {
-        display: block;
-      }
-    </style>
-  </head>
-  <body>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blaster Anime Game</title>
+  <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- Üst Bölüm: Düşmanların geldiği alan -->
+    <div id="enemy-zone">
+      <p>Enemy Zone</p>
+    </div>
+
+    <!-- Alt Bölüm: Oyuncunun kontrol ettiği alan -->
+    <div id="control-zone">
+      <div id="shield">Shield Zone</div>
+      <div id="weapons">
+        <button id="weapon-1">Weapon 1</button>
+        <button id="weapon-2">Weapon 2</button>
+        <button id="weapon-3">Weapon 3</button>
+      </div>
+    </div>
+  </div>
+</body>
 </html>
