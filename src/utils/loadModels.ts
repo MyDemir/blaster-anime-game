@@ -7,7 +7,7 @@ export const loadCharacterModel = (scene: Scene) => {
   loader.load('/models/character/character-male-c.glb', (gltf) => {
     const model = gltf.scene;
     model.scale.set(0.5, 0.5, 0.5);
-    model.position.set(0, 0, 0);
+    model.position.set(0, 1, 0);
     scene.add(model);
   }, undefined, (error) => {
     console.error('Model yüklenemedi:', error);
