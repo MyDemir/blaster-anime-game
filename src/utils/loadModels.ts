@@ -1,62 +1,48 @@
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { Scene } from 'three';
 
 export class ModelsLoader {
-  private loader: GLTFLoader;
-  private scene: THREE.Scene;
+    private loader: GLTFLoader;
+    private scene: Scene;
 
-  constructor(scene: THREE.Scene) {
-    this.loader = new GLTFLoader();
-    this.scene = scene;
-  }
+    constructor(scene: Scene) {
+        this.loader = new GLTFLoader();
+        this.scene = scene;
+    }
 
-  // Blaster modellerini yükle
-  loadBlasterModels() {
-    const modelPaths = [
-      '/models/kit/blaster-a.glb',
-      '/models/kit/blaster-b.glb',
-      '/models/kit/blaster-c.glb',
-      '/models/kit/blaster-d.glb',
-    ];
+    async loadCharacterModels(): Promise<void> {
+        try {
+            const ninjaModel = await this.loader.loadAsync('/models/character/ninja.glb');
+            const samuraiModel = await this.loader.loadAsync('/models/character/samurai.glb');
 
-    modelPaths.forEach((path) => {
-      this.loadModel(path);
-    });
-  }
+            // Model ayarlarını yap
+            ninjaModel.scene.scale.set(1, 1, 1);
+            samuraiModel.scene.scale.set(1, 1, 1);
 
-  // Karakter modellerini yükle
-  loadCharacterModels() {
-    const characterPath = '/models/character/character-male-c.glb'; // Dosya adını kendi dosyanıza göre güncelleyin
-    this.loadModel(characterPath, new THREE.Vector3(0, 0.25, 0)); // Platform üzerinde konumlandır
-  }
+            // Modelleri sakla veya işle
+            // this.scene.add(ninjaModel.scene);
+            // this.scene.add(samuraiModel.scene);
 
-  // Genel model yükleme fonksiyonu
-  private loadModel(path: string, position?: THREE.Vector3) {
-    this.loader.load(
-      path,
-      (gltf) => {
-        const model = gltf.scene;
-        
-        // Pozisyon varsa ayarla
-        if (position) {
-          model.position.copy(position);
+        } catch (error) {
+            console.error('Karakter modelleri yüklenirken hata:', error);
+            throw error;
         }
+    }
 
-        // Gölge ayarları
-        model.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            child.castShadow = true;
-            child.receiveShadow = true;
-          }
-        });
+    async loadBlasterModels(): Promise<void> {
+        try {
+            // Silah modellerini yükle
+            const blasterModel = await this.loader.loadAsync('/models/weapons/blaster.glb');
+            
+            // Model ayarlarını yap
+            blasterModel.scene.scale.set(1, 1, 1);
 
-        this.scene.add(model);
-        console.log(`Model başarıyla yüklendi: ${path}`);
-      },
-      undefined,
-      (error) => {
-        console.error(`Model yüklenirken bir hata oluştu: ${path}`, error);
-      }
-    );
-  }
+            // Modeli sakla veya işle
+            // this.scene.add(blasterModel.scene);
+
+        } catch (error) {
+            console.error('Silah modelleri yüklenirken hata:', error);
+            throw error;
+        }
+    }
 }
