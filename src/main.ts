@@ -1,6 +1,9 @@
-import { createScene } from './Game';
+import { Game } from './Game';
 
-const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
-const scene = createScene(canvas);
+const canvas = document.querySelector('#webgl-canvas') as HTMLCanvasElement;
 
-// İleride buraya oyun döngüsü, input kontrolleri, model yükleme vs. eklenecek
+if (canvas) {
+    const game = new Game(canvas);
+} else {
+    console.error('Canvas elementi bulunamadı!');
+}
