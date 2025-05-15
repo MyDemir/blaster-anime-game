@@ -1,78 +1,55 @@
 import * as THREE from 'three';
-import { loadCharacterModel } from './utils/loadModels';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-export class Game {
-  private scene: THREE.Scene;
-  private camera: THREE.PerspectiveCamera;
-  private renderer: THREE.WebGLRenderer;
-  private waveNumber: number;
-  private enemiesLeft: number;
-  private playerScore: number;
+export function createScene(canvas: HTMLCanvasElement) {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xbfd1e5); // Açık mavi gökyüzü tonu
 
-  constructor() {
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.renderer = new THREE.WebGLRenderer();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(5, 5, 5);
+  camera.lookAt(0, 0, 0);
 
-    this.waveNumber = 1;
-    this.enemiesLeft = 0;
-    this.playerScore = 0;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
 
-    this.init();
+  // Işıklar
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambientLight);
+
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  dirLight.position.set(5, 10, 5);
+  dirLight.castShadow = true;
+  scene.add(dirLight);
+
+  // Zemin (tahta benzeri platform)
+  const platform = new THREE.Mesh(
+    new THREE.BoxGeometry(10, 0.5, 10),
+    new THREE.MeshStandardMaterial({ color: 0x8b5a2b }) // Ahşap kahverengi tonu
+  );
+  platform.receiveShadow = true;
+  scene.add(platform);
+
+  // Kontroller
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.target.set(0, 1, 0);
+  controls.update();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
   }
+  animate();
 
-  private init() {
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(this.renderer.domElement);
+  // Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
-    // Kamera ve ışık ayarları
-    this.camera.position.z = 5;
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(0, 10, 10);
-    this.scene.add(light);
-
-    // İlk karakter modelini yükle
-    loadCharacterModel(this.scene);
-
-    // İlk dalgayı başlat
-    this.startWave();
-  }
-
-  private startWave() {
-    console.log(`Dalga ${this.waveNumber} başladı!`);
-    this.enemiesLeft = this.waveNumber * 5; // Dalga başına düşman sayısı
-    this.spawnEnemies();
-  }
-
-  private spawnEnemies() {
-    for (let i = 0; i < this.enemiesLeft; i++) {
-      const enemy = this.createEnemy();
-      this.scene.add(enemy);
-      enemy.position.set(Math.random() * 10 - 5, Math.random() * 5, 0); // Rastgele pozisyon
-    }
-  }
-
-  private createEnemy(): THREE.Mesh {
-    const geometry = new THREE.SphereGeometry(0.5, 32, 32);
-    const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
-    return new THREE.Mesh(geometry, material);
-  }
-
-  private endWave() {
-    console.log(`Dalga ${this.waveNumber} tamamlandı!`);
-    this.waveNumber++;
-    this.playerScore += this.waveNumber * 100; // Skor artışı
-    this.startWave();
-  }
-
-  public start() {
-    const animate = () => {
-      requestAnimationFrame(animate);
-
-      // Oyun döngüsü: sahneyi sürekli render et
-      this.renderer.render(this.scene, this.camera);
-    };
-
-    animate();
-  }
+  return scene;
 }
