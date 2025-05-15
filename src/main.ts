@@ -4,7 +4,7 @@
 //const scene = createScene(canvas);
 
 // İleride buraya oyun döngüsü, input kontrolleri, model yükleme vs. eklenecek
-import { Game } from './game';
+import { Game } from './Game';
 
 const game = new Game();
 game.start();
