@@ -28,25 +28,25 @@ export class MenuManager {
         const characterGrid = document.querySelector('.character-grid');
         if (!characterGrid) return;
 
-        // Karakter listesi
         const characters = [
             {
                 id: 'ninja',
                 name: 'Ninja',
+                modelPath: '/models/character/ninja.glb',
                 stats: { speed: 90, power: 70 }
             },
             {
                 id: 'samurai',
                 name: 'Samuray',
+                modelPath: '/models/character/samurai.glb',
                 stats: { speed: 70, power: 90 }
             }
         ];
 
-        // Karakter kartlarını oluştur
         characterGrid.innerHTML = characters.map(char => `
             <div class="character-card" data-character="${char.id}">
                 <div class="character-image">
-                    <img src="/models/character/${char.id}.glb" alt="${char.name}">
+                    <img src="${char.modelPath}" alt="${char.name}">
                 </div>
                 <div class="character-info">
                     <h3>${char.name}</h3>
@@ -121,10 +121,6 @@ export class MenuManager {
         if (selectedCard) {
             selectedCard.classList.add('selected');
             this.selectedCharacter = characterId;
-            selectedCard.classList.add('character-selected-animation');
-            setTimeout(() => {
-                selectedCard.classList.remove('character-selected-animation');
-            }, 500);
         }
     }
 
