@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ModelsLoader } from './utils/loadModels';
 import { EventEmitter } from './utils/EventEmitter';
-import { MenuManager } from './MenuManager';
+import { MenuManager } from './utils/MenuManager';
 
 export class Game {
     private scene: THREE.Scene;
@@ -23,7 +23,7 @@ export class Game {
         selectedCharacter: null as string | null,
         highScore: 0,
         currentUser: 'MyDemir',
-        lastPlayTime: '2025-05-15 22:37:32'
+        lastPlayTime: '2025-05-15 22:56:55'
     };
     
     private ui = {
@@ -96,10 +96,13 @@ export class Game {
 
     private async loadGameModels(): Promise<void> {
         try {
+            console.log('Model yükleme başlıyor...');
             await Promise.all([
                 this.modelsLoader.loadCharacterModels(),
                 this.modelsLoader.loadBlasterModels()
             ]);
+            
+            console.log('Modeller başarıyla yüklendi');
             
             if (this.ui.loadingScreen) {
                 this.ui.loadingScreen.classList.add('fade-out');
@@ -112,9 +115,17 @@ export class Game {
             }
         } catch (error) {
             console.error('Model yükleme hatası:', error);
+            const loadingContent = this.ui.loadingScreen?.querySelector('.loading-content');
+            const loadingSpinner = this.ui.loadingScreen?.querySelector('.loading-spinner');
             const loadingText = this.ui.loadingScreen?.querySelector('.loading-text');
+            
+            if (loadingSpinner) {
+                loadingSpinner.remove();
+            }
+            
             if (loadingText) {
                 loadingText.textContent = 'Yükleme hatası! Lütfen sayfayı yenileyin.';
+                loadingText.classList.add('error-text');
             }
         }
     }
@@ -372,4 +383,4 @@ export class Game {
     private checkCollisions(): void {
         // Çarpışma kontrol mantığı
     }
-        }
+}
