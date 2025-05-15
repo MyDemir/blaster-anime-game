@@ -32,13 +32,13 @@ export class MenuManager {
             {
                 id: 'ninja',
                 name: 'Ninja',
-                modelPath: '/models/character/ninja.glb',
+                modelPath: './models/character/ninja.glb',
                 stats: { speed: 90, power: 70 }
             },
             {
                 id: 'samurai',
                 name: 'Samuray',
-                modelPath: '/models/character/samurai.glb',
+                modelPath: './models/character/samurai.glb',
                 stats: { speed: 70, power: 90 }
             }
         ];
@@ -121,25 +121,14 @@ export class MenuManager {
         if (selectedCard) {
             selectedCard.classList.add('selected');
             this.selectedCharacter = characterId;
+            selectedCard.classList.add('character-selected-animation');
+            setTimeout(() => {
+                selectedCard.classList.remove('character-selected-animation');
+            }, 500);
         }
     }
 
     public getSelectedCharacter(): string | null {
         return this.selectedCharacter;
-    }
-
-    public updateScoreboard(scores: Array<{name: string, score: number}>): void {
-        const scoreboardList = document.querySelector('.scoreboard-list');
-        if (scoreboardList) {
-            scoreboardList.innerHTML = scores
-                .map((score, index) => `
-                    <div class="score-item">
-                        <span class="rank">#${index + 1}</span>
-                        <span class="player-name">${score.name}</span>
-                        <span class="score">${score.score}</span>
-                    </div>
-                `)
-                .join('');
-        }
     }
 }
