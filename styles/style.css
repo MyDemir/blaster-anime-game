@@ -392,14 +392,6 @@ input[type="range"]::-webkit-slider-thumb:hover {
         font-size: 16px;
     }
 }
-/* En sona eklenecek yeni stiller */
-
-/* Hata mesajı stilleri */
-.error-text {
-    color: #ff4444;
-    font-weight: bold;
-    margin-top: 20px;
-}
 
 /* Kullanıcı bilgileri için stiller */
 .user-info {
