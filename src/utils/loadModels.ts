@@ -18,8 +18,8 @@ export class ModelsLoader {
             
             // Model yolları
             const modelPaths = {
-                ninja: './models/character/ninja.glb',
-                samurai: './models/character/samurai.glb'
+                ninja: './models/character/character-female-a.glb',
+                samurai: './models/character/character-male-a.glb'
             };
 
             console.log('Ninja modeli yükleme denemesi...');
