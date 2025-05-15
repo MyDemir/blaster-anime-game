@@ -1,63 +1,55 @@
 import * as THREE from 'three';
-import { loadGLBModel } from './utils/loadModels';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-export class Game {
-  scene: THREE.Scene;
-  camera: THREE.PerspectiveCamera;
-  renderer: THREE.WebGLRenderer;
-  light: THREE.DirectionalLight;
+export function createScene(canvas: HTMLCanvasElement) {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xbfd1e5); // Açık mavi gökyüzü tonu
 
-  constructor() {
-    // Sahne
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x222222); // Daha sinematik bir fon
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(5, 5, 5);
+  camera.lookAt(0, 0, 0);
 
-    // Kamera
-    this.camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    this.camera.position.z = 5;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
 
-    // Canvas içinden WebGL renderer oluştur
-    const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+  // Işıklar
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambientLight);
 
-    // Işık
-    this.light = new THREE.DirectionalLight(0xffffff, 1);
-    this.light.position.set(10, 10, 10).normalize();
-    this.scene.add(this.light);
+  const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+  dirLight.position.set(5, 10, 5);
+  dirLight.castShadow = true;
+  scene.add(dirLight);
+
+  // Zemin (tahta benzeri platform)
+  const platform = new THREE.Mesh(
+    new THREE.BoxGeometry(10, 0.5, 10),
+    new THREE.MeshStandardMaterial({ color: 0x8b5a2b }) // Ahşap kahverengi tonu
+  );
+  platform.receiveShadow = true;
+  scene.add(platform);
+
+  // Kontroller
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.05;
+  controls.target.set(0, 1, 0);
+  controls.update();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
   }
+  animate();
 
-  async loadModels() {
-    const modelPaths = [
-      '/models/kit/blaster-a.glb',
-      '/models/kit/blaster-h.glb',
-      '/models/kit/blaster-g.glb',
-      '/models/kit/blaster-d.glb',
-    ];
+  // Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
 
-    for (let i = 0; i < modelPaths.length; i++) {
-      try {
-        const model = await loadGLBModel(modelPaths[i]);
-        model.position.x = i * 2 - 3;
-        this.scene.add(model);
-      } catch (error) {
-        console.error('Model yüklenirken hata:', modelPaths[i], error);
-      }
-    }
-  }
-
-  animate = () => {
-    requestAnimationFrame(this.animate);
-    this.renderer.render(this.scene, this.camera);
-  };
-
-  async start() {
-    await this.loadModels();
-    this.animate();
-  }
+  return scene;
 }
