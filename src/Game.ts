@@ -21,7 +21,9 @@ export class Game {
         health: 100,
         ammo: 30,
         selectedCharacter: null as string | null,
-        highScore: 0
+        highScore: 0,
+        currentUser: 'MyDemir',
+        lastPlayTime: '2025-05-15 22:37:32'
     };
     
     private ui = {
@@ -323,6 +325,22 @@ export class Game {
         this.ui.score.textContent = `Skor: ${this.gameState.score}`;
         this.ui.health.textContent = `Can: ${this.gameState.health}`;
         this.ui.ammo.textContent = `Mermi: ${this.gameState.ammo}`;
+
+        // Kullanıcı ve zaman bilgisini güncelle
+        const userInfoDiv = document.createElement('div');
+        userInfoDiv.classList.add('user-info');
+        userInfoDiv.innerHTML = `
+            <div>Oyuncu: ${this.gameState.currentUser}</div>
+            <div>Tarih: ${this.gameState.lastPlayTime}</div>
+        `;
+
+        // Eğer UI panelinde bu bilgiler yoksa ekle
+        const existingUserInfo = this.ui.uiContainer.querySelector('.user-info');
+        if (!existingUserInfo) {
+            this.ui.uiContainer.querySelector('.ui-panel')?.appendChild(userInfoDiv);
+        } else {
+            existingUserInfo.innerHTML = userInfoDiv.innerHTML;
+        }
     }
 
     private animate(): void {
@@ -354,4 +372,4 @@ export class Game {
     private checkCollisions(): void {
         // Çarpışma kontrol mantığı
     }
-    }
+        }
