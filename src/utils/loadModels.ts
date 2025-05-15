@@ -26,7 +26,7 @@ export class ModelsLoader {
 
   // Karakter modellerini yükle
   loadCharacterModels() {
-    const characterPath = '/models/character/kenny.glb'; // Dosya adını kendi dosyanıza göre güncelleyin
+    const characterPath = '/models/character/character-male-c.glb'; // Dosya adını kendi dosyanıza göre güncelleyin
     this.loadModel(characterPath, new THREE.Vector3(0, 0.25, 0)); // Platform üzerinde konumlandır
   }
 
