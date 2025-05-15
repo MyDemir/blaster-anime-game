@@ -9,24 +9,33 @@ export class Game {
   ground: THREE.Mesh;
 
   constructor() {
+    // Sahne oluştur
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0xaaaaaa);
 
-    this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    // Kamera oluştur
+    this.camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
     this.camera.position.set(0, 2, 6);
 
-    this.renderer = new THREE.WebGLRenderer({ antialias: true });
+    // Mevcut HTML'deki canvas'ı kullan
+    const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
+    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.renderer.shadowMap.enabled = true;
-    document.body.appendChild(this.renderer.domElement);
 
+    // Işıklar
     this.light = new THREE.DirectionalLight(0xffffff, 1);
     this.light.position.set(5, 10, 7);
     this.light.castShadow = true;
     this.scene.add(this.light);
-
     this.scene.add(new THREE.AmbientLight(0xffffff, 0.4));
 
+    // Zemin
     this.ground = new THREE.Mesh(
       new THREE.PlaneGeometry(50, 50),
       new THREE.MeshStandardMaterial({ color: 0x555555 })
@@ -38,10 +47,10 @@ export class Game {
 
   async loadModels() {
     const modelPaths = [
-      './models/kit/blaster-a.glb',
-      './models/kit/blaster-b.glb',
-      './models/kit/blaster-c.glb',
-      './models/kit/blaster-d.glb',
+      '/models/kit/blaster-a.glb',
+      '/models/kit/blaster-b.glb',
+      '/models/kit/blaster-c.glb',
+      '/models/kit/blaster-d.glb',
     ];
 
     for (let i = 0; i < modelPaths.length; i++) {
@@ -65,4 +74,4 @@ export class Game {
     await this.loadModels();
     this.animate();
   }
-          }
+}
