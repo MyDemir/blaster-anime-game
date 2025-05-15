@@ -38,10 +38,10 @@ export class Game {
 
   async loadModels() {
     const modelPaths = [
-      'public/models/kit/blaster-a.glb',
-      'public/models/kit/blaster-b.glb',
-      'public/models/kit/blaster-c.glb',
-      'public/models/kit/blaster-d.glb',
+      './models/kit/blaster-a.glb',
+      './models/kit/blaster-b.glb',
+      './models/kit/blaster-c.glb',
+      './models/kit/blaster-d.glb',
     ];
 
     for (let i = 0; i < modelPaths.length; i++) {
