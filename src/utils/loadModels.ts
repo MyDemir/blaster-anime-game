@@ -1,51 +1,62 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-// Sahneyi oluştur
-const scene = new THREE.Scene();
+export class ModelsLoader {
+  private loader: GLTFLoader;
+  private scene: THREE.Scene;
 
-// Kamera oluştur
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
+  constructor(scene: THREE.Scene) {
+    this.loader = new GLTFLoader();
+    this.scene = scene;
+  }
 
-// Renderer oluştur
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
+  // Blaster modellerini yükle
+  loadBlasterModels() {
+    const modelPaths = [
+      '/models/kit/blaster-a.glb',
+      '/models/kit/blaster-b.glb',
+      '/models/kit/blaster-c.glb',
+      '/models/kit/blaster-d.glb',
+    ];
 
-// Işık ekle
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(10, 10, 10).normalize();
-scene.add(light);
+    modelPaths.forEach((path) => {
+      this.loadModel(path);
+    });
+  }
 
-// GLTF Loader
-const loader = new GLTFLoader();
+  // Karakter modellerini yükle
+  loadCharacterModels() {
+    const characterPath = '/models/character/kenny.glb'; // Dosya adını kendi dosyanıza göre güncelleyin
+    this.loadModel(characterPath, new THREE.Vector3(0, 0.25, 0)); // Platform üzerinde konumlandır
+  }
 
-// Model yolları
-const modelPaths = [
-  '/models/kit/blaster-a.glb',
-  '/models/kit/blaster-b.glb',
-  '/models/kit/blaster-c.glb',
-  '/models/kit/blaster-d.glb',
-];
+  // Genel model yükleme fonksiyonu
+  private loadModel(path: string, position?: THREE.Vector3) {
+    this.loader.load(
+      path,
+      (gltf) => {
+        const model = gltf.scene;
+        
+        // Pozisyon varsa ayarla
+        if (position) {
+          model.position.copy(position);
+        }
 
-// Modelleri yükle ve sahneye ekle
-modelPaths.forEach((path) => {
-  loader.load(
-    path,
-    (gltf) => {
-      scene.add(gltf.scene);
-    },
-    undefined,
-    (error) => {
-      console.error(`Model yüklenirken bir hata oluştu: ${path}`, error);
-    }
-  );
-});
+        // Gölge ayarları
+        model.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            child.castShadow = true;
+            child.receiveShadow = true;
+          }
+        });
 
-// Sahneyi sürekli render et
-function animate() {
-  requestAnimationFrame(animate);
-  renderer.render(scene, camera);
+        this.scene.add(model);
+        console.log(`Model başarıyla yüklendi: ${path}`);
+      },
+      undefined,
+      (error) => {
+        console.error(`Model yüklenirken bir hata oluştu: ${path}`, error);
+      }
+    );
+  }
 }
-animate();
