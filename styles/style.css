@@ -392,3 +392,43 @@ input[type="range"]::-webkit-slider-thumb:hover {
         font-size: 16px;
     }
 }
+/* En sona eklenecek yeni stiller */
+
+/* Hata mesajı stilleri */
+.error-text {
+    color: #ff4444;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+/* Kullanıcı bilgileri için stiller */
+.user-info {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 14px;
+    color: #aaa;
+}
+
+.user-info div {
+    margin-bottom: 5px;
+}
+
+/* Loading ekranı güncellemeleri */
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    border-top-color: #4a90e2;
+    animation: spin 1s linear infinite;
+}
+
+.loading-screen.error .loading-spinner {
+    display: none;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+    }
