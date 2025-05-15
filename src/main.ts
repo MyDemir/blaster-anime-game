@@ -1,5 +1,6 @@
-//import './style.css';
-import { Game } from './Game';
+import { createScene } from './game';
 
-const game = new Game();
-game.start(); // eğer Game içinde bir start fonksiyonu varsa
+const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
+const scene = createScene(canvas);
+
+// İleride buraya oyun döngüsü, input kontrolleri, model yükleme vs. eklenecek
