@@ -1,4 +1,4 @@
-import { createScene } from './game';
+import { createScene } from './Game.ts';
 
 const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement;
 const scene = createScene(canvas);
