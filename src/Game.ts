@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { loadBlasterCharacters } from './utils/loadModels';
 
 export function createScene(canvas: HTMLCanvasElement) {
   const scene = new THREE.Scene();
@@ -29,6 +30,9 @@ export function createScene(canvas: HTMLCanvasElement) {
   );
   platform.receiveShadow = true;
   scene.add(platform);
+
+  // Blaster karakterlerini yükle
+  loadBlasterCharacters(scene);
 
   // Kontroller
   const controls = new OrbitControls(camera, renderer.domElement);
