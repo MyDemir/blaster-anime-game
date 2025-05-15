@@ -1,4 +1,4 @@
-import { EventEmitter } from './EventEmitter';
+import { EventEmitter } from './utils/EventEmitter';
 
 export class MenuManager {
     private menus: Map<string, HTMLElement>;
