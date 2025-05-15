@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { ModelsLoader } from './utils/loadModels';
 import { EventEmitter } from './utils/EventEmitter';
-import { MenuManager } from '/MenuManager';
+import { MenuManager } from './utils/MenuManager';
 
 export class Game {
     private scene: THREE.Scene;
