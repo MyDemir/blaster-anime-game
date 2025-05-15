@@ -4,9 +4,10 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 // Sahneyi oluştur
 const scene = new THREE.Scene();
 
-// Kamera oluştur
+// Kamera oluştur ve sahneyi görecek şekilde ayarla
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.z = 5;
+camera.position.set(0, 5, 10); // Yukarıdan ve biraz uzaktan bakış
+camera.lookAt(0, 0, 0);
 
 // Renderer oluştur
 const renderer = new THREE.WebGLRenderer();
@@ -14,14 +15,17 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Işık ekle
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(10, 10, 10).normalize();
-scene.add(light);
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); // Yumuşak beyaz ışık
+scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+directionalLight.position.set(10, 10, 10).normalize();
+scene.add(directionalLight);
 
 // GLTF Loader
 const loader = new GLTFLoader();
 
-// Kit modelleri yolları
+// Model yolları
 const modelPaths = [
   '/models/kit/blaster-a.glb',
   '/models/kit/blaster-b.glb',
@@ -29,38 +33,19 @@ const modelPaths = [
   '/models/kit/blaster-d.glb',
 ];
 
-// Karakter modelleri yolları
-const characterPaths = [
-  '/models/characters/character-a.glb',
-  '/models/characters/character-b.glb',
-];
-
-// Kit modellerini yükle ve sahneye ekle
+// Modelleri yükle ve sahneye ekle
 modelPaths.forEach((path) => {
   loader.load(
     path,
     (gltf) => {
-      scene.add(gltf.scene);
+      const model = gltf.scene;
+      model.position.set(0, 0, 0); // Varsayılan pozisyon
+      scene.add(model);
+      console.log(`Model yüklendi: ${path}`);
     },
     undefined,
     (error) => {
-      console.error(`Kit modeli yüklenirken bir hata oluştu: ${path}`, error);
-    }
-  );
-});
-
-// Karakter modellerini yükle ve sahneye ekle
-characterPaths.forEach((path, index) => {
-  loader.load(
-    path,
-    (gltf) => {
-      const character = gltf.scene;
-      character.position.set(index * 2, 0, 0); // Karakterleri yan yana diz
-      scene.add(character);
-    },
-    undefined,
-    (error) => {
-      console.error(`Karakter modeli yüklenirken bir hata oluştu: ${path}`, error);
+      console.error(`Model yüklenirken bir hata oluştu: ${path}`, error);
     }
   );
 });
