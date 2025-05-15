@@ -23,10 +23,10 @@ const loader = new GLTFLoader();
 
 // Model yolları
 const modelPaths = [
-  '/public/models/kit/blaster-a.glb',
-  '/public/models/kit/blaster-b.glb',
-  '/public/models/kit/blaster-c.glb',
-  '/public/models/kit/blaster-d.glb',
+  '/models/kit/blaster-a.glb',
+  '/models/kit/blaster-b.glb',
+  '/models/kit/blaster-c.glb',
+  '/models/kit/blaster-d.glb',
 ];
 
 // Modelleri yükle ve sahneye ekle
