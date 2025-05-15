@@ -21,7 +21,7 @@ scene.add(light);
 // GLTF Loader
 const loader = new GLTFLoader();
 
-// Model yolları
+// Kit modelleri yolları
 const modelPaths = [
   '/models/kit/blaster-a.glb',
   '/models/kit/blaster-b.glb',
@@ -29,7 +29,13 @@ const modelPaths = [
   '/models/kit/blaster-d.glb',
 ];
 
-// Modelleri yükle ve sahneye ekle
+// Karakter modelleri yolları
+const characterPaths = [
+  '/models/characters/character-a.glb',
+  '/models/characters/character-b.glb',
+];
+
+// Kit modellerini yükle ve sahneye ekle
 modelPaths.forEach((path) => {
   loader.load(
     path,
@@ -38,7 +44,23 @@ modelPaths.forEach((path) => {
     },
     undefined,
     (error) => {
-      console.error(`Model yüklenirken bir hata oluştu: ${path}`, error);
+      console.error(`Kit modeli yüklenirken bir hata oluştu: ${path}`, error);
+    }
+  );
+});
+
+// Karakter modellerini yükle ve sahneye ekle
+characterPaths.forEach((path, index) => {
+  loader.load(
+    path,
+    (gltf) => {
+      const character = gltf.scene;
+      character.position.set(index * 2, 0, 0); // Karakterleri yan yana diz
+      scene.add(character);
+    },
+    undefined,
+    (error) => {
+      console.error(`Karakter modeli yüklenirken bir hata oluştu: ${path}`, error);
     }
   );
 });
