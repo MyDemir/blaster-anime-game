@@ -1,34 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blaster Anime Game</title>
-  <link rel="stylesheet" href="styles/style.css">
-</head>
-<body>
-  <div id="game-container">
-    <!-- Üst Bölüm: Düşmanların geldiği alan -->
-    <div id="enemy-zone">
-      <div id="ui-overlay">
-        <div id="wave-info">Wave: <span id="wave-number">1</span></div>
-        <div id="score-info">Score: <span id="player-score">0</span></div>
-        <div id="enemy-info">Enemies Left: <span id="enemies-left">10</span></div>
-      </div>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blaster Anime Game</title>
+  </head>
+  <body>
+    <!-- Oyun UI katmanı -->
+    <div id="ui">
+      <div id="score">Skor: 0</div>
+      <div id="health">Can: 100</div>
+      <button id="startBtn">Oyunu Başlat</button>
     </div>
 
-    <!-- Alt Bölüm: Oyuncunun kontrol ettiği alan -->
-    <div id="control-zone">
-      <div id="shield">Shield Zone</div>
-      <div id="weapons">
-        <button id="weapon-1">Weapon 1</button>
-        <button id="weapon-2">Weapon 2</button>
-        <button id="weapon-3">Weapon 3</button>
-      </div>
-    </div>
-  </div>
-  <script src="src/Game.ts"></script>
-  <script src="src/main.ts"></script>
-  <script type="module" src="/src/utils/loadModels.ts"></script>
-</body>
+    <!-- WebGL sahnesi -->
+    <canvas id="webgl-canvas"></canvas>
+
+    <!-- Vite ile modül giriş dosyası -->
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>
