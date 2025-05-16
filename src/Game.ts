@@ -76,6 +76,7 @@ export class Game {
 
         this.loadGameModels().then(() => {
             this.animate();
+            (window as any).showNotification('Oyun yüklendi!', 'success');
         });
 
         this.ui.uiContainer.classList.add('hidden');
@@ -104,6 +105,7 @@ export class Game {
         if (this.gameState.score > this.gameState.highScore) {
             this.gameState.highScore = this.gameState.score;
             localStorage.setItem('highScore', this.gameState.highScore.toString());
+            (window as any).showNotification('Yeni yüksek skor kaydedildi! 🏆', 'success');
         }
     }
 
@@ -116,6 +118,7 @@ export class Game {
             ]);
             
             console.log('Modeller başarıyla yüklendi');
+            (window as any).showNotification('Modeller başarıyla yüklendi!', 'success');
             
             if (this.ui.loadingScreen) {
                 this.ui.loadingScreen.classList.add('fade-out');
@@ -128,6 +131,8 @@ export class Game {
             }
         } catch (error) {
             console.error('Model yükleme hatası:', error);
+            (window as any).showNotification('Model yükleme hatası!', 'error');
+            
             const loadingContent = this.ui.loadingScreen?.querySelector('.loading-content');
             const loadingSpinner = this.ui.loadingScreen?.querySelector('.loading-spinner');
             const loadingText = this.ui.loadingScreen?.querySelector('.loading-text');
@@ -187,14 +192,23 @@ export class Game {
 
         this.eventEmitter.on('playerDamage', (damage: number) => {
             this.gameState.health -= damage;
+            
+            if (this.gameState.health <= 30) {
+                (window as any).showNotification('Kritik hasar! Can düşük!', 'warning');
+            }
+            
             this.updateUI();
             if (this.gameState.health <= 0) {
+                (window as any).showNotification('Öldünüz!', 'error');
                 this.endGame();
             }
         });
 
         this.eventEmitter.on('scoreUpdate', (points: number) => {
             this.gameState.score += points;
+            if (points > 0) {
+                (window as any).showNotification(`+${points} puan!`, 'success');
+            }
             this.updateUI();
         });
 
@@ -212,6 +226,13 @@ export class Game {
 
         document.getElementById('exitToMainBtn')?.addEventListener('click', () => {
             this.exitToMain();
+        });
+
+        document.getElementById('confirmCharacter')?.addEventListener('click', () => {
+            const selectedChar = this.menuManager.getSelectedCharacter();
+            if (selectedChar) {
+                (window as any).showNotification(`${selectedChar} karakteri seçildi!`, 'success');
+            }
         });
     }
 
@@ -274,12 +295,13 @@ export class Game {
     private startGame(): void {
         const selectedCharacter = this.menuManager.getSelectedCharacter();
         if (!selectedCharacter) {
-            alert('Lütfen bir karakter seçin!');
+            (window as any).showNotification('Lütfen bir karakter seçin!', 'error');
             this.menuManager.showMenu('character');
             return;
         }
 
-        // Seçilen karakterin modelini al
+        (window as any).showNotification(`${this.gameState.currentUser} olarak oyuna başlandı!`, 'success');
+
         const characterModel = this.modelsLoader.getModel(selectedCharacter);
         if (characterModel) {
             if (this.player) {
@@ -304,11 +326,13 @@ export class Game {
 
     private resumeGame(): void {
         this.gameState.isPaused = false;
+        (window as any).showNotification('Oyun devam ediyor', 'success');
         this.menuManager.showMenu('none');
     }
 
     private restartGame(): void {
         this.saveHighScore();
+        (window as any).showNotification('Oyun yeniden başlatılıyor...', 'info');
         this.startGame();
     }
 
@@ -316,13 +340,20 @@ export class Game {
         this.gameState.isStarted = false;
         this.gameState.isPaused = false;
         this.saveHighScore();
+        (window as any).showNotification('Ana menüye dönülüyor...', 'info');
         this.ui.uiContainer.classList.add('hidden');
         this.menuManager.showMenu('main');
     }
 
     private endGame(): void {
         this.gameState.isStarted = false;
+        
+        if (this.gameState.score > this.gameState.highScore) {
+            (window as any).showNotification('Yeni yüksek skor! 🏆', 'success');
+        }
+        
         this.saveHighScore();
+        (window as any).showNotification(`Oyun bitti! Skorunuz: ${this.gameState.score}`, 'info');
         
         const finalScoreElement = document.getElementById('final-score');
         const highScoreElement = document.getElementById('high-score');
@@ -338,11 +369,17 @@ export class Game {
 
     private shoot(): void {
         if (this.gameState.ammo <= 0) {
+            (window as any).showNotification('Mermi bitti!', 'error');
             this.eventEmitter.emit('outOfAmmo');
             return;
         }
         
         this.gameState.ammo--;
+        
+        if (this.gameState.ammo <= 5) {
+            (window as any).showNotification('Mermi azalıyor!', 'warning');
+        }
+        
         this.eventEmitter.emit('weaponFired', this.gameState.ammo);
         this.updateUI();
     }
@@ -351,8 +388,10 @@ export class Game {
         this.gameState.isPaused = !this.gameState.isPaused;
         
         if (this.gameState.isPaused) {
+            (window as any).showNotification('Oyun duraklatıldı', 'warning');
             this.menuManager.showMenu('pause');
         } else {
+            (window as any).showNotification('Oyun devam ediyor', 'success');
             this.menuManager.showMenu('none');
         }
     }
@@ -362,7 +401,6 @@ export class Game {
         this.ui.health.textContent = `Can: ${this.gameState.health}`;
         this.ui.ammo.textContent = `Mermi: ${this.gameState.ammo}`;
 
-        // Kullanıcı ve zaman bilgisini güncelle
         const userInfoDiv = document.createElement('div');
         userInfoDiv.classList.add('user-info');
         userInfoDiv.innerHTML = `
@@ -417,4 +455,4 @@ export class Game {
     private checkCollisions(): void {
         // Çarpışma kontrol mantığı
     }
-            }
+        }
