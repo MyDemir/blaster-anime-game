@@ -50,13 +50,26 @@
     <div id="character-select" class="menu-screen hidden">
       <div class="menu-content">
         <h2>Karakter Seçimi</h2>
-        <div class="character-grid">
-          <!-- Karakterler dinamik olarak eklenecek -->
+        <div class="character-carousel-container">
+          <button class="carousel-button prev">❮</button>
+          <div class="character-carousel">
+            <div class="character-cards-wrapper">
+              <!-- Karakterler dinamik olarak eklenecek -->
+            </div>
+          </div>
+          <button class="carousel-button next">❯</button>
         </div>
-        <button id="backFromCharSelect" class="menu-button back-button">
-          <span class="button-icon">◀</span>
-          <span class="button-text">Geri</span>
-        </button>
+        <div class="character-nav-dots"></div>
+        <div class="menu-buttons">
+          <button id="backFromCharSelect" class="menu-button back-button">
+            <span class="button-icon">◀</span>
+            <span class="button-text">Geri</span>
+          </button>
+          <button id="confirmCharacter" class="menu-button">
+            <span class="button-text">Karakteri Seç</span>
+            <span class="button-icon">✓</span>
+          </button>
+        </div>
       </div>
     </div>
 
