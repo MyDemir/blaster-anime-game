@@ -23,7 +23,7 @@ export class Game {
         selectedCharacter: null as string | null,
         highScore: 0,
         currentUser: 'MyDemir',
-        lastPlayTime: '2025-05-15 22:56:55'
+        lastPlayTime: '2025-05-16 00:33:50'
     };
     
     private ui = {
@@ -72,12 +72,25 @@ export class Game {
         this.setupWorld();
         this.setupEventListeners();
         this.loadHighScore();
+        this.setCurrentDateTime();
 
         this.loadGameModels().then(() => {
             this.animate();
         });
 
         this.ui.uiContainer.classList.add('hidden');
+    }
+
+    private setCurrentDateTime(): void {
+        const now = new Date();
+        const year = now.getUTCFullYear();
+        const month = String(now.getUTCMonth() + 1).padStart(2, '0');
+        const day = String(now.getUTCDate()).padStart(2, '0');
+        const hours = String(now.getUTCHours()).padStart(2, '0');
+        const minutes = String(now.getUTCMinutes()).padStart(2, '0');
+        const seconds = String(now.getUTCSeconds()).padStart(2, '0');
+        
+        this.gameState.lastPlayTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     }
 
     private loadHighScore(): void {
@@ -124,7 +137,7 @@ export class Game {
             }
             
             if (loadingText) {
-                loadingText.textContent = 'Yükleme hatası! Lütfen sayfayı yenileyin.';
+                loadingText.textContent = 'Model yükleme hatası! Lütfen sayfayı yenileyin.';
                 loadingText.classList.add('error-text');
             }
         }
@@ -266,11 +279,23 @@ export class Game {
             return;
         }
 
+        // Seçilen karakterin modelini al
+        const characterModel = this.modelsLoader.getModel(selectedCharacter);
+        if (characterModel) {
+            if (this.player) {
+                this.scene.remove(this.player);
+            }
+            this.player = characterModel.scene.clone();
+            this.scene.add(this.player);
+        }
+
         this.gameState.isStarted = true;
         this.gameState.isPaused = false;
         this.gameState.score = 0;
         this.gameState.health = 100;
         this.gameState.ammo = 30;
+        this.gameState.selectedCharacter = selectedCharacter;
+        this.setCurrentDateTime();
         
         this.ui.uiContainer.classList.remove('hidden');
         this.menuManager.showMenu('none');
@@ -341,11 +366,20 @@ export class Game {
         const userInfoDiv = document.createElement('div');
         userInfoDiv.classList.add('user-info');
         userInfoDiv.innerHTML = `
-            <div>Oyuncu: ${this.gameState.currentUser}</div>
-            <div>Tarih: ${this.gameState.lastPlayTime}</div>
+            <div class="user-info-item">
+                <span class="user-info-label">Oyuncu:</span>
+                <span class="user-info-value">${this.gameState.currentUser}</span>
+            </div>
+            <div class="user-info-item">
+                <span class="user-info-label">Karakter:</span>
+                <span class="user-info-value">${this.gameState.selectedCharacter || 'Seçilmedi'}</span>
+            </div>
+            <div class="user-info-item">
+                <span class="user-info-label">Son Oynama:</span>
+                <span class="user-info-value">${this.gameState.lastPlayTime}</span>
+            </div>
         `;
 
-        // Eğer UI panelinde bu bilgiler yoksa ekle
         const existingUserInfo = this.ui.uiContainer.querySelector('.user-info');
         if (!existingUserInfo) {
             this.ui.uiContainer.querySelector('.ui-panel')?.appendChild(userInfoDiv);
@@ -383,4 +417,4 @@ export class Game {
     private checkCollisions(): void {
         // Çarpışma kontrol mantığı
     }
-}
+            }
