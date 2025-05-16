@@ -405,121 +405,102 @@ input[type="range"]::-webkit-slider-thumb:hover {
 .user-info div {
     margin-bottom: 5px;
 }
-.character-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+/* Karakter Seçim Carousel Stilleri */
+.character-carousel-container {
+    position: relative;
+    width: 100%;
+    margin: 30px 0;
 }
 
-.character-card {
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 10px;
+.character-carousel {
+    width: 100%;
     overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.character-cards-wrapper {
+    display: flex;
+    transition: transform 0.5s ease;
+    margin: 0 -10px;
+}
+
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: rgba(74, 144, 226, 0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
     cursor: pointer;
-    position: relative;
+    z-index: 2;
+    transition: all 0.3s ease;
 }
 
-.character-preview {
-    width: 100%;
-    height: 250px;
-    position: relative;
-    background: rgba(0, 0, 0, 0.5);
+.carousel-button:hover {
+    background: rgba(74, 144, 226, 0.4);
 }
 
-.character-canvas {
-    width: 100%;
-    height: 100%;
-    display: block;
+.carousel-button.prev {
+    left: -20px;
 }
 
-.character-info {
-    padding: 15px;
-    color: white;
+.carousel-button.next {
+    right: -20px;
 }
 
-.character-info h3 {
-    margin: 0 0 10px 0;
-    font-size: 1.5em;
-    color: #3498db;
-}
-
-.character-stats {
+.character-nav-dots {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    justify-content: center;
+    gap: 8px;
+    margin: 20px 0;
 }
 
-.stat {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.stat-label {
-    min-width: 60px;
-    font-size: 0.9em;
-    color: #bdc3c7;
-}
-
-.stat-bar {
-    flex-grow: 1;
+.nav-dot {
+    width: 8px;
     height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.stat-fill {
-    height: 100%;
-    background: #3498db;
-    transition: width 0.3s ease;
+.nav-dot.active {
+    background: #4a90e2;
+    transform: scale(1.2);
 }
 
-.character-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+/* Karakter Kartı Güncellemeleri */
+.character-card {
+    flex: 0 0 300px;
+    margin: 0 10px;
+    transform: scale(0.9);
+    opacity: 0.7;
+    transition: all 0.3s ease;
 }
 
-.character-card.selected {
-    box-shadow: 0 0 20px rgba(52, 152, 219, 0.8);
-    border: 2px solid #3498db;
+.character-card.active {
+    transform: scale(1);
+    opacity: 1;
 }
 
-.character-selected-animation {
-    animation: pulse 0.5s ease-out;
+/* Mobil Uyumluluk */
+@media (max-width: 768px) {
+    .character-card {
+        flex: 0 0 260px;
+    }
+    
+    .carousel-button {
+        width: 32px;
+        height: 32px;
+        font-size: 16px;
+    }
 }
 
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-    100% { transform: scale(1); }
-}
-
-.user-info {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-}
-
-.user-info-item {
-    display: flex;
-    justify-content: space-between;
-    margin: 5px 0;
-    color: white;
-    font-size: 14px;
-}
-
-.user-info-label {
-    font-weight: bold;
-    margin-right: 10px;
-    color: #bdc3c7;
-}
-
-.user-info-value {
-    color: #3498db;
+@media (max-width: 480px) {
+    .character-card {
+        flex: 0 0 220px;
+    }
 }
