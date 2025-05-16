@@ -45,7 +45,7 @@ export class ModelsLoader {
         try {
             console.log('Silah modelleri yükleme başlıyor...');
             
-            const blasterPath = './models/kit/blaster.glb';
+            const blasterPath = './models/kit/blaster-r.glb';
 
             console.log('Blaster modeli yükleme denemesi...');
             const blasterModel = await this.loader.loadAsync(blasterPath);
