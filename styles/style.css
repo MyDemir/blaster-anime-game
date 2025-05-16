@@ -504,3 +504,110 @@ input[type="range"]::-webkit-slider-thumb:hover {
         flex: 0 0 220px;
     }
 }
+/* Modern Bildirim Sistemi */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+}
+
+.notification {
+    background: rgba(30, 30, 30, 0.95);
+    border-left: 4px solid #4a90e2;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    min-width: 300px;
+    max-width: 450px;
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification.success {
+    border-left-color: #2ecc71;
+}
+
+.notification.error {
+    border-left-color: #e74c3c;
+}
+
+.notification.warning {
+    border-left-color: #f1c40f;
+}
+
+.notification-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.notification-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.notification-message {
+    color: #fff;
+    font-size: 14px;
+    line-height: 1.4;
+    margin-right: 10px;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    margin-left: 10px;
+    transition: color 0.2s ease;
+}
+
+.notification-close:hover {
+    color: #fff;
+}
+
+/* Bildirim Animasyonları */
+@keyframes slideIn {
+    from {
+        transform: translateX(120%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(120%);
+    }
+}
+
+.notification.slide-in {
+    animation: slideIn 0.3s forwards;
+}
+
+.notification.slide-out {
+    animation: slideOut 0.3s forwards;
+}
